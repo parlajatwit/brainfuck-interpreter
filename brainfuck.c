@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define DATA_SIZE 30000
+
 unsigned char data[DATA_SIZE];
 
-char instructions[] = "+++++++++++++++++++++++++++++++++++++++++.";
-char* instruction_ptr = &instructions[0];
+size_t program_size = 0;
+char* instruction_ptr = NULL;
 char* data_ptr = &data[0];
 
 void interpret();
@@ -46,8 +48,20 @@ void interpret() {
     }
 }
 
-void load() {
-    // TODO: implement loading from file
+void load(char file[]) {
+    FILE* fp = fopen(file, "r");
+    if (fp == NULL) {
+	printf("Can't read file!\n");
+	exit(EXIT_FAILURE);
+    }
+
+    fseek(fp, 0, SEEK_END);
+    program_size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+
+    instruction_ptr = malloc(program_size);
+    fgets(instruction_ptr, program_size, fp);
+    fclose(fp);
 }
 
 void run() {
@@ -57,6 +71,7 @@ void run() {
     }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    load(argv[1]);
     run();
 }
