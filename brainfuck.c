@@ -61,7 +61,7 @@ void interpret() {
 	    putchar(*data_ptr);
 	    break;
 	case ',':
-	    scanf("%hhu", *data_ptr);
+	    *data_ptr = fgetc(stdin);
 	    break;
 	case '[':
 	    if (*data_ptr == 0) {
